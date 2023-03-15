@@ -1,0 +1,2 @@
+flagai>=1.6
+deepspeed==0.7.7
