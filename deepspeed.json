@@ -23,7 +23,7 @@
   "optimizer": {
     "type": "AdamW",
     "params": {
-      "lr": 1.2e-3,
+      "lr": 1.2e-4,
       "weight_decay": 0.10,
       "betas": [
         0.9,
