@@ -28,7 +28,7 @@ parser.add_argument("--clip_grad_norm", default=1.0, type=float, help="The trunc
 parser.add_argument("--log_every_n_step", default=25, type=int, help="The steps to output training information.")
 parser.add_argument("--save_every_n_steps", default=10000, type=int, help="The epochs to save the trained models.")
 parser.add_argument("--max_seq_length", default=2048, type=int, help="The maximum length of input sentences")
-parser.add_argument("--gradient_accumulation_steps", default=10, type=int, help="The gradient_accumulation_steps.")
+parser.add_argument("--gradient_accumulation_steps", default=32, type=int, help="The gradient_accumulation_steps.")
 parser.add_argument("--not_call_launch", default=False, action="store_true")
 parser.add_argument("--world_size", default=16, type=int)
 parser.add_argument("--local_rank", default=-1, type=int)
