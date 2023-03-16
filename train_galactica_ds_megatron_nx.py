@@ -13,9 +13,9 @@ from flagai.trainer import Trainer
 from flagai.auto_model.auto_loader import AutoLoader
 
 parser = argparse.ArgumentParser()
-parser.add_argument("--tokenizer_path", default="/share/project/lijijie/FlagAI/examples/gpt3_pretrain/state_dict/galactica-6.7b-en", type=str, help="path of the pretrained student model")
+parser.add_argument("--tokenizer_path", default="/data/FlagAI/examples/gpt3_pretrain/state_dict/galactica-6.7b-en", type=str, help="path of the pretrained student model")
 parser.add_argument("--save_path", default="outputs/run_galactica", type=str, help="path to save checkpoints")
-parser.add_argument("--train_file", default="/share/project/ldwang/data/indexed_dataset/merged/dedup_wudao_5pct_merged_text_document", type=str, help="path to train file")
+parser.add_argument("--train_file", default="/data/dedup_wudao/dedup_wudao_5pct_merged_text_document", type=str, help="path to train file")
 parser.add_argument("--host_file", default="hostfiles", type=str, help="path to eval file")
 parser.add_argument("--data_scripts", default="data_script/json.py", type=str, help="path to save checkpoints")
 parser.add_argument("--data_cache", default="data_cache/", type=str, help="path to save checkpoints")
@@ -61,7 +61,7 @@ def main():
         )
 
     tokenizer = AutoTokenizer.from_pretrained(args.tokenizer_path)
-    model_dir = "/share/project/lijijie/FlagAI/examples/gpt3_pretrain/state_dict"
+    model_dir = "/data/FlagAI/examples/gpt3_pretrain/state_dict"
     auto_loader = AutoLoader(
     "lm",
     model_name="galactica-6.7b-en",
