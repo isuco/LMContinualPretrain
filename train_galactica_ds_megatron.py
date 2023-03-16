@@ -13,23 +13,22 @@ from flagai.trainer import Trainer
 from flagai.auto_model.auto_loader import AutoLoader
 
 parser = argparse.ArgumentParser()
-parser.add_argument("--student_model_path", default="./state_dict/galactica-30b-en", type=str, help="path of the pretrained student model")
+parser.add_argument("--tokenizer_path", default="./state_dict/galactica-6.7b-en", type=str, help="path of the pretrained student model")
 parser.add_argument("--save_path", default="outputs/run_galactica", type=str, help="path to save checkpoints")
-parser.add_argument("--ds_config", default="deepspeed.json", type=str, help="deepspeed config file")
-parser.add_argument("--train_file", default="/data/wudao_dedup_5pct_vocab_expand/wudao_dedup_5pct_vocab_expand", type=str, help="path to train file")
-parser.add_argument("--eval_file", default="/share/project/ldwang/data/pile/train/debug.txt", type=str, help="path to eval file")
+parser.add_argument("--train_file", default="/data/dedup_wudao/dedup_wudao_5pct_merged_text_document", type=str, help="path to train file")
+parser.add_argument("--host_file", default="/share/project/ldwang/data/pile/train/debug.txt", type=str, help="path to eval file")
 parser.add_argument("--data_scripts", default="data_script/json.py", type=str, help="path to save checkpoints")
 parser.add_argument("--data_cache", default="data_cache/", type=str, help="path to save checkpoints")
 parser.add_argument("--log_dir", default="logs/", type=str, help="path to save checkpoints")
 parser.add_argument("--epochs", default=10, type=int, help="Total number of training epochs to perform.")
 parser.add_argument("--per_gpu_batch_size", default=4, type=int, help="The batch size.")
-parser.add_argument("--learning_rate", default=1.2e-3, type=float, help="The initial learning rate for Adam.")
+parser.add_argument("--learning_rate", default=1.2e-4, type=float, help="The initial learning rate for Adam.")
 parser.add_argument("--adam_epsilon", default=1e-8, type=float, help="The episilon for Adam.")
 parser.add_argument("--clip_grad_norm", default=1.0, type=float, help="The truncated grad threshold")
 parser.add_argument("--log_every_n_step", default=25, type=int, help="The steps to output training information.")
-parser.add_argument("--save_every_n_steps", default=3200, type=int, help="The epochs to save the trained models.")
+parser.add_argument("--save_every_n_steps", default=10000, type=int, help="The epochs to save the trained models.")
 parser.add_argument("--max_seq_length", default=2048, type=int, help="The maximum length of input sentences")
-parser.add_argument("--gradient_accumulation_steps", default=32, type=int, help="The gradient_accumulation_steps.")
+parser.add_argument("--gradient_accumulation_steps", default=10, type=int, help="The gradient_accumulation_steps.")
 parser.add_argument("--not_call_launch", default=False, action="store_true")
 parser.add_argument("--world_size", default=16, type=int)
 parser.add_argument("--local_rank", default=-1, type=int)
@@ -51,18 +50,18 @@ def main():
         lr=args.learning_rate,
         master_ip='127.0.0.1',
         num_gpus=8,
-        num_nodes=14,
+        num_nodes=2,
         master_port=29513,
         fp16=True,
         checkpoint_activations=True,
-        hostfile='./hostfiles',
+        hostfile=args.host_file,
         training_script=__file__,
         deepspeed_config='deepspeed.json',
         model_parallel_size = 8,
         )
 
     tokenizer = AutoTokenizer.from_pretrained(args.student_model_path)
-    model_dir = "./state_dict_new"
+    model_dir = "./state_dict"
     auto_loader = AutoLoader(
     "lm",
     model_name="galactica-6.7b-en",
@@ -75,7 +74,7 @@ def main():
     data_prefix = args.train_file
     data_impl = 'mmap'
     splits_string = '9999,1,0'
-    train_valid_test_num_samples = [2099000, 1000, 0]
+    train_valid_test_num_samples = [10500000, 1000, 0]
     seq_length = 2048
     seed = 2023
     skip_warmup = True
